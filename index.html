@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue Chatroom</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <div id="sidebar">
+      <div class="members">
+        <p v-html="showMemberCount()"></p>
+        <ul>
+          <li v-for="member in members[currentChannel]">
+            {{member}}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="messages-container">
+      <div class="channels">
+        <label class="channel-btn" v-for="channel in Object.keys(messages)" >
+          #{{channel}}
+          <input type="radio" name="channel" :id="channel" :checked="channel == currentChannel" v-on:click="setChannel">
+        </label>
+        <button v-on:click="createNewChannel" class="new-channel-btn">+</button>
+      </div>
+      <div id="messages">
+        <div class="bubble" v-for="msg in messages[currentChannel]">
+          <p :class="isAuthor(msg) ? 'me' : ''">{{`${msg.author}: ${msg.content}`}}</p>
+        </div>
+      </div>
+      <div id="input-container">
+        <label>Username:
+          <input type="text" id="author" v-on:blur="setAuthor">
+        </label>
+        <input type="text" id="message" v-on:keyup="sendMessage">
+      </div>
+    </div>
+  </div>
+  <script type="module" src="chat.js"></script>
+</body>
+</html>
