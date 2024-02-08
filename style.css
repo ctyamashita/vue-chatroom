@@ -9,16 +9,15 @@ body {
   padding: 0;
   overflow: hidden;
   display: grid;
-  align-items: center;
+  align-items: flex-start;
   font-family: monospace;
-  align-items: center;
   background-color: cadetblue;
 }
 
 #app {
   display: grid;
   /* background-color: cadetblue; */
-  height: 90%;
+  height: 95%;
 }
 
 .messages-container {
