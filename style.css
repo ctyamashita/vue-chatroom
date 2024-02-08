@@ -4,24 +4,26 @@
 }
 
 body {
-  height: -webkit-fill-available;
+  height: 100vh;
   margin: 0;
   padding: 0;
   overflow: hidden;
   display: grid;
   align-items: center;
   font-family: monospace;
+  align-items: center;
+  background-color: cadetblue;
 }
 
 #app {
   display: grid;
-  background-color: cadetblue;
-  height: 100%;
+  /* background-color: cadetblue; */
+  height: 90%;
 }
 
 .messages-container {
   display: grid;
-  grid-template-rows: var(--base-height) calc(100vh - 2 * var(--base-height) - 2 * var(--spacing)) var(--base-height);
+  grid-template-rows: var(--base-height) calc(100% - 2 * var(--base-height)) var(--base-height);
   overflow: hidden;
   padding: var(--spacing);
 }
@@ -217,6 +219,7 @@ body {
 @media (min-width: 480px) {
   #app {
     grid-template-columns: auto 1fr;
+    height: 100%;
   }
 
   #sidebar {
