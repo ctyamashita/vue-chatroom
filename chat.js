@@ -1,23 +1,21 @@
 import { createApp } from 'vue';
 
+const oldMessages = localStorage.getItem('messages') ? JSON.parse(localStorage.getItem('messages')) : {};
+const currentChannel = 858
+
 createApp({
   data() {
     return {
-      messages: {
-        '858': []
-      },
-      members: {
-        '858': []
-      },
+      messages: oldMessages,
+      members: {},
       currentChannel: 858,
-      author: 'cty'
+      author: 'cty',
+      messageToReply: false
     }
   },
   mounted() {
     document.querySelector('#author').value = this.author
-    setInterval(() => {
-      Object.keys(this.messages).forEach(channel => this.fetchMessages(channel))
-    }, 1000);
+    setInterval(() => { Object.keys(this.messages).forEach(channel => this.fetchMessages(channel)) }, 1000);
   },
   methods: {
     fetchMessages(channel) {
@@ -25,27 +23,34 @@ createApp({
       fetch(url)
         .then(response => response.json())
         .then(data=> {
-          const messages = data.messages;
-          const previousChannelMsgs = this.messages[data.channel]
-          if (previousChannelMsgs && previousChannelMsgs.length > 0) {
-            const newMessages = messages.filter(msg=> msg.id > previousChannelMsgs[previousChannelMsgs.length - 1].id)
-            this.messages[data.channel] = [...previousChannelMsgs, ...newMessages]
-          } else {
-            this.messages[data.channel] = messages;
+          const previousChannelMsgs = this.messages[channel]
+          const newMessages = data.messages.filter(msg=> msg.id > previousChannelMsgs[previousChannelMsgs.length - 1].id)
+          if (previousChannelMsgs && newMessages.length > 0) {
+            this.messages[channel] = [...previousChannelMsgs, ...newMessages]
+            this.moveToMsg(this.lastMsgId(channel));
+          } else if (!previousChannelMsgs && data.messages.length > 0) {
+            this.messages[channel] = data.messages;
           }
-          this.members[data.channel] = this.getMembers(this.messages[data.channel])
+          this.members[channel] = this.getMembers(this.messages[channel]);
+          localStorage.setItem('messages', JSON.stringify(this.messages));
         });
     },
     sendMessage(e) {
       const url = `https://wagon-chat.herokuapp.com/${this.currentChannel}/messages`;
       const input = e.target
+      const isReply = this.messageToReply ? `<span hidden>reply-${this.messageToReply}</span>` : ''
       if (e.key == 'Enter' && this.author) {
         fetch(url, {
           method: 'POST',
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({author: this.author, content: input.value})
+          body: JSON.stringify({author: this.author, content: `${isReply}${input.value}`})
         }).then(response=>response.json()).then(data=>{
           input.value = ''
+          this.messageToReply = false;
+          const lastPost = data.id
+          setTimeout(() => {
+            this.moveToMsg(lastPost);
+          }, 1000);
         })
       }
     },
@@ -56,13 +61,97 @@ createApp({
     setChannel(e) { this.currentChannel = e.target.id },
     isAuthor(message) { return message.author == this.author},
     getMembers(messages) {
+      if (!messages) return []
       const members = messages.map((msg) => {return msg.author})
       return [...new Set(members)]
     },
-    showMemberCount() { return `Users (${this.members[this.currentChannel].length})` },
-    createNewChannel(e) {
+    showMemberCount() { return `Members (${this.members[this.currentChannel] ? this.members[this.currentChannel].length : 0})` },
+    createNewChannel() {
       const channel = prompt("Please enter the batch number", "000");
       if (channel !== null && channel !== "") { this.messages[channel] = [] }
+    },
+    generateTimestamp(msg) {
+      const minutesAgo = Math.round((Date.now() - Date.parse(msg.created_at))/60000)
+      if (minutesAgo >= 60) {
+        const msgTime = new Date(msg.created_at)
+        const hours = msgTime.getHours();
+        const minutes = msgTime.getMinutes();
+        const currentTime = new Date(Date.now());
+        if (currentTime.getHours() < hours) {
+          return `yesterday at ${hours}:${minutes}`
+        } else {
+          return `${hours}:${minutes}`
+        }
+      } else if (minutesAgo >= 720) {
+        const days = Math.floor(minutesAgo / 720);
+        return days == 1 ? 'yesterday' : `${days}d ago`;
+      } else if (minutesAgo == 0) {
+        return 'now';
+      } else {
+        return `${minutesAgo}m ago`;
+      }
+    },
+    generateMemberTimestamp(member, channel) {
+      const memberMsgs = this.messages[channel].filter((msg) => msg.author == member);
+      const lastMsg = memberMsgs.sort((a,b) => Date.parse(b.created_at) - Date.parse(a.created_at))[0];
+      return this.generateTimestamp(lastMsg)
+    },
+    lastMsgFromMember(member, channel) {
+      const memberMsgs = this.messages[channel].filter((msg) => msg.author == member);
+      const lastMsg = memberMsgs.sort((a,b) => Date.parse(b.created_at) - Date.parse(a.created_at))[0];
+      return lastMsg.id
+    },
+    lastMsgId(channel) {
+      return this.messages[channel][this.messages[channel].length - 1].id
+    },
+    moveToMsg(id) {
+      const el = document.getElementById(id)
+      if (el) el.scrollIntoView();
+    },
+    triggerReply(id) {
+      this.messageToReply = id;
+      document.querySelector('#message').focus()
+    },
+    replySignal() {
+      if (!this.messages[this.currentChannel]) return ''
+      const replyTo = this.messages[this.currentChannel].filter(msg=>msg.id == this.messageToReply);
+      if (replyTo.length === 1) {
+        return `↪ ${replyTo[0].author}`
+      } else {
+        return ''
+      }
+    },
+    cancelReply() {
+      this.messageToReply = false
+    },
+    generateReply(msg) {
+      const msgId = msg.match(/reply-(\d+)/);
+      if (msgId) {
+        const msgContent = msg.replaceAll(/<\w+ \w+>reply-\d+<\/\w+>/g, '');
+        const id = msgId[1]
+        const msgReplied = this.messages[this.currentChannel].filter(msg => msg.id == Number(id))[0];
+        const reply = `<a href="#${msgReplied.id}" class="bubble">
+                        <div>
+                          <p class="msg-author">${ msgReplied.author } <small class="posted-time">${this.generateTimestamp(msgReplied)}</small></p>
+                          <p class="msg-content">${ msgReplied.content }</p>
+                        </div>
+                      </a>
+                      <p class="msg-content">${msgContent}</p>`
+        return reply
+      } else {
+        return msg
+      }
+    },
+    closeChannel() {
+      if (Object.keys(this.messages).length == 1) {
+        alert('You need at least 1 channel open!')
+      } else {
+        if (confirm('Are you sure you want to close this tab?')) {
+          const remainingChannels = Object.keys(this.messages).filter(channel => Number(channel) == this.currentChannel)
+          delete this.messages[this.currentChannel];
+          this.currentChannel = remainingChannels[0];
+        }
+      }
     }
   }
 }).mount('#app')

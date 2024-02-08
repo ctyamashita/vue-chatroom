@@ -16,33 +16,43 @@
 <body>
   <div id="app">
     <div id="sidebar">
+      <p v-html="showMemberCount()"></p>
       <div class="members">
-        <p v-html="showMemberCount()"></p>
         <ul>
-          <li v-for="member in members[currentChannel]">
-            {{member}}
+          <li v-for="member in members[currentChannel]" v-on:click="moveToMsg(lastMsgFromMember(member, currentChannel))">
+            <p>{{member}}</p>
+            <p>last message - <small class="posted-time" v-html="generateMemberTimestamp(member, currentChannel)"></small></p>
           </li>
         </ul>
       </div>
     </div>
     <div class="messages-container">
-      <div class="channels">
-        <label class="channel-btn" v-for="channel in Object.keys(messages)" >
-          #{{channel}}
-          <input type="radio" name="channel" :id="channel" :checked="channel == currentChannel" v-on:click="setChannel">
-        </label>
-        <button v-on:click="createNewChannel" class="new-channel-btn">+</button>
+      <div class="channels-container">
+        <div class="channels">
+          <label class="channel-btn" v-for="channel in Object.keys(messages)" >
+            #{{channel}}
+            <input type="radio" name="channel" :id="channel" :checked="channel == currentChannel" v-on:click="setChannel">
+          </label>
+          <button v-on:click="createNewChannel" class="new-channel-btn">+</button>
+        </div>
+        <button class="close-tab-btn"  v-on:click="closeChannel">✖</button>
       </div>
       <div id="messages">
-        <div class="bubble" v-for="msg in messages[currentChannel]">
-          <p :class="isAuthor(msg) ? 'me' : ''">{{`${msg.author}: ${msg.content}`}}</p>
+        <div class="bubble" v-for="msg in messages[currentChannel]" :id="msg.id">
+          <div :class="isAuthor(msg) ? 'bubble-content me' : 'bubble-content'" :id="this.messageToReply == msg.id ? 'highlight' : ''">
+            <p class="msg-author">{{ msg.author }} <small class="posted-time" v-html="generateTimestamp(msg)"></small></p>
+            <p class="msg-content" v-html="generateReply(msg.content)"></p>
+            <div class="reply-btn-container">
+              <button class="reply-btn" v-on:click="triggerReply(msg.id)">↩</btn>
+            </div>
+          </div>
         </div>
       </div>
       <div id="input-container">
-        <label>Username:
+        <label>username
           <input type="text" id="author" v-on:blur="setAuthor">
         </label>
-        <input type="text" id="message" v-on:keyup="sendMessage">
+        <div class="message-input-container"><span v-html="replySignal()"></span><input type="text" id="message" v-on:keyup="sendMessage"><button class="reply-cancel-btn" v-on:click="cancelReply">✖</button></div>
       </div>
     </div>
   </div>

@@ -28,15 +28,21 @@ body {
 
 #sidebar {
   display: none;
-  gap: var(--spacing);
   padding: var(--spacing) 0 var(--spacing) var(--spacing)
 }
 
 .channels {
   display: flex;
   align-items: center;
-  padding: var(--spacing) calc(var(--spacing) * 2) 0;
+  margin: 0 var(--spacing);
   gap: var(--spacing);
+  overflow: scroll;
+  overflow-y: hidden;
+}
+
+.channels::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 #messages {
@@ -47,12 +53,12 @@ body {
   overflow-x: hidden;
   background: white;
   border-radius: var(--spacing) var(--spacing) 0 0;
-  box-shadow: inset 0 -7em 8em -10em;
+  box-shadow: inset 0 -7em 8em -10em lightgray;
 }
 
 #input-container {
   display: grid;
-  grid-template-columns: 100px 1fr;
+  grid-template-columns: 1fr;
   gap: var(--spacing);
   padding: var(--spacing);
   background-color: white;
@@ -72,41 +78,129 @@ body {
   width: 100%;
 }
 
-.bubble:has(p.me) {
+.bubble .bubble-content#highlight {
+  outline: solid 4px orange;
+  outline-offset: -4px;
+}
+
+.reply-btn-container {
+  position: absolute;
+  bottom: calc(var(--spacing)/3);
+  right: var(--spacing);
+}
+
+.reply-btn {
+  border: none;
+  background: transparent;
+  color: teal;
+  padding: 0;
+  opacity: .5;
+}
+
+.reply-btn:hover, .reply-btn:focus {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.reply-btn svg {
+  height: 12px;
+  width: 12px;
+}
+
+.bubble:has(.bubble-content.me) {
   justify-content: flex-end;
 }
 
-.bubble p {
+.bubble .bubble-content {
   word-wrap: break-word;
   padding: var(--spacing) calc(var(--spacing) * 2);
   background-color: lightgoldenrodyellow;
   max-width: 80vw;
+  width: auto;
   border-radius: var(--spacing) var(--spacing) var(--spacing) 0;
   margin: var(--spacing) 0;
   box-shadow: .2em .2em rgba(0,0,0,.1);
+  position: relative;
 }
 
-.bubble p.me {
+.bubble-content .msg-author {
+  margin: 0;
+  font-weight: 900;
+  border-bottom: solid 1px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing);
+}
+.bubble-content .msg-content {
+  margin: 0;
+}
+
+.bubble .bubble-content.me {
   background-color: lightgreen;
   border-radius: var(--spacing) var(--spacing) 0 var(--spacing);
 }
 
 .members {
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: var(--spacing);
+  background: lightblue;
+  border-radius: 0 0 var(--spacing) var(--spacing);
   overflow-y: scroll;
+  max-width: 300px;
+  height: calc(100vh - (var(--spacing) * 2) - var(--base-height));
+  box-shadow: inset 0 7em 8em -10em dodgerblue;
+  padding-left: var(--spacing);
 }
 
 .members ul {
   list-style: none;
-  padding: 0 16px;
+  padding: 0;
 }
 
-.members p {
+#sidebar:has(ul:empty) {
+  opacity: 0;
+  width: 0;
+}
+
+#sidebar > p {
   text-align: center;
   margin: 0;
-  padding: calc(var(--spacing) * 2);
   font-size: 1.2em;
+  height: var(--base-height);
+  display: grid;
+  align-items: center;
+  border-radius: var(--spacing) var(--spacing) 0 0;
+  background-color: lightblue;
+  font-weight: 900;
+  color: darkblue;
+}
+
+.members ul li {
+  box-shadow: inset 0 0 0 2px mediumslateblue;
+  border-radius: var(--spacing);
+  overflow: hidden;
+  margin-bottom: var(--spacing);
+  cursor: pointer;
+}
+
+.members ul li:hover, .members ul li:focus {
+  box-shadow: inset 0 0 0 2px darkslateblue;
+}
+
+.members ul li:hover p:first-child, .members ul li:focus p:first-child {
+  background-color: darkslateblue;
+}
+
+.members ul li p {
+  word-wrap: break-word;
+  margin: 0;
+  padding: var(--spacing);
+}
+
+.members ul li p:first-child {
+  font-size: 1.2em;
+  font-weight: 900;
+  background-color: mediumslateblue;
+  color: white;
 }
 
 #channel {
@@ -122,7 +216,7 @@ body {
 
 @media (min-width: 480px) {
   #app {
-    grid-template-columns: 2fr 10fr;
+    grid-template-columns: auto 1fr;
   }
 
   #sidebar {
@@ -133,14 +227,21 @@ body {
 .new-channel-btn {
   border: none;
   background-color: orange;
-  color: black;
+  fill: black;
   box-shadow: inset 0 -1em 1em -1em brown;
+  opacity: .7;
+  transition: .3s;
+}
+
+.new-channel-btn:hover, .new-channel-btn:focus {
+  opacity: 1;
+  transition: .3s;
 }
 
 .channel-btn {
-  background-color: rgba(0,0,0,.3);
+  background-color: teal;
   color: white;
-  box-shadow: inset 0 -1em 1em -1em black;
+  box-shadow: inset 0 -1em 1em -1em rebeccapurple;
 }
 
 .channel-btn, .new-channel-btn {
@@ -150,6 +251,8 @@ body {
   font-weight: 900;
   font-family: monospace;
   font-size: 2em;
+  cursor: pointer;
+  line-height: 1.2;
 }
 
 .channel-btn:has(input:checked) {
@@ -175,11 +278,115 @@ body {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: lightgray;
   border-radius: var(--spacing);
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: darkgrey;
+}
+
+.posted-time {
+  color: dimgrey;
+}
+
+.msg-content > .bubble {
+  background-color: rgba(255, 255, 255, .5);
+  opacity: .6;
+  padding: var(--spacing);
+  width: auto;
+  text-decoration: none;
+  display: block;
+}
+
+#input-container:has(span:empty) {
+  grid-template-columns: 60px 1fr;
+}
+
+#input-container:has(span:empty) > label {
+  display: block;
+}
+
+#input-container > label {
+  display: none;
+}
+
+.message-input-container {
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--spacing);
+  background-color: orange;
+  border-radius: var(--spacing);
+}
+
+.message-input-container:has(span:empty) {
+  grid-template-columns: 1fr;
+  gap: 0;
+  background-color: transparent;
+  align-items: flex-end;
+}
+
+.message-input-container span {
+  padding-left: var(--spacing);
+  color: dimgray;
+}
+
+.message-input-container span:empty {
+  padding: 0;
+}
+
+.message-input-container input {
+  flex-grow: 1;
+}
+
+.reply-cancel-btn {
+  border: none;
+  background-color: transparent;
+  width: 1.5em;
+  display: inline-flex;
+  cursor: pointer;
+  opacity: .5;
+  padding: 0;
+  text-align: center;
+}
+
+.reply-cancel-btn:hover, .reply-cancel-btn:focus {
+  opacity: 1;
+}
+
+.reply-cancel-btn svg {
+  padding-right: 4px;
+}
+
+.message-input-container:has(span:empty) .reply-cancel-btn {
+  display: none;
+}
+
+.channels-container {
+  display: grid;
+  grid-template-columns: 1fr var(--base-height);
+}
+
+.close-tab-btn {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  margin: var(--spacing);
+  border-radius: 50%;
+  background-color: crimson;
+  font-size: 1em;
+  font-weight: 900;
+  color: white;
+  cursor: pointer;
+  opacity: .3;
+  transition: .3s;
+  padding: 0;
+  border: none;
+}
+
+.close-tab-btn:hover, .close-tab-btn:focus {
+  opacity: 1;
+  transition: .3s;
 }
