@@ -7,7 +7,7 @@ body {
   height: 100vh;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  /* overflow: hidden; */
   display: grid;
   align-items: flex-start;
   font-family: monospace;
@@ -17,19 +17,17 @@ body {
 #app {
   display: grid;
   /* background-color: cadetblue; */
-  height: 90%;
+  padding: var(--spacing);
 }
 
 .messages-container {
   display: grid;
-  grid-template-rows: var(--base-height) calc(100% - 2 * var(--base-height)) var(--base-height);
-  overflow: hidden;
-  padding: var(--spacing);
+  grid-template-rows: var(--base-height) calc(100vh - (var(--base-height) * 2) - (var(--spacing) * 2)) var(--base-height);
+  padding-left: var(--spacing);
 }
 
 #sidebar {
   display: none;
-  padding: var(--spacing) 0 var(--spacing) var(--spacing)
 }
 
 .channels {
@@ -47,8 +45,6 @@ body {
 }
 
 #messages {
-  display: flex;
-  flex-direction: column;
   padding: var(--spacing) calc(var(--spacing) * 2);
   padding-right: 6px;
   overflow-y: scroll;
@@ -62,7 +58,6 @@ body {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--spacing);
-  padding: var(--spacing);
   background-color: white;
   border-radius: 0 0 var(--spacing) var(--spacing);
 }
@@ -219,11 +214,11 @@ body {
 @media (min-width: 480px) {
   #app {
     grid-template-columns: auto 1fr;
-    height: 100%;
   }
 
   #sidebar {
     display: grid;
+    grid-template-rows: auto 1fr;
   }
 }
 
@@ -305,7 +300,10 @@ body {
 }
 
 #input-container:has(span:empty) {
+  display: grid;
   grid-template-columns: 60px 1fr;
+  align-items: center;
+  padding: 0 calc(var(--spacing) * 2);
 }
 
 #input-container:has(span:empty) > label {
