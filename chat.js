@@ -27,7 +27,7 @@ createApp({
           if (previousChannelMsgs.length > 0) {
             const newMessages = data.messages.filter(msg=> msg.id > previousChannelMsgs[previousChannelMsgs.length - 1].id)
             this.messages[channel] = [...previousChannelMsgs, ...newMessages]
-            this.moveToMsg(this.lastMsgId(channel));
+            if (newMessages.length > 0) this.moveToMsg(this.lastMsgId(channel));
           } else {
             this.messages[channel] = data.messages;
           }
