@@ -17,7 +17,7 @@ body {
 #app {
   display: grid;
   /* background-color: cadetblue; */
-  height: 90%;
+  height: 100%;
 }
 
 .messages-container {

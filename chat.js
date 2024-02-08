@@ -14,7 +14,11 @@ createApp({
     }
   },
   mounted() {
+    window.onload = () => {
+      this.resizeHandler();
+    }
     document.querySelector('#author').value = 'user01'
+    window.addEventListener('resize', this.resizeHandler);
     setInterval(() => { Object.keys(this.messages).forEach(channel => this.fetchMessages(channel)) }, 1000);
   },
   methods: {
@@ -152,6 +156,10 @@ createApp({
           this.currentChannel = remainingChannels[0];
         }
       }
+    },
+    resizeHandler() {
+      const height = document.documentElement.clientHeight;
+      document.body.height = height;
     }
   }
 }).mount('#app')
