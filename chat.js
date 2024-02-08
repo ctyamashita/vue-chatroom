@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 
-const oldMessages = localStorage.getItem('messages') ? JSON.parse(localStorage.getItem('messages')) : {};
+const oldMessages = localStorage.getItem('messages') ? JSON.parse(localStorage.getItem('messages')) : {'858': []};
 const currentChannel = 858
 
 createApp({
@@ -8,13 +8,13 @@ createApp({
     return {
       messages: oldMessages,
       members: {},
-      currentChannel: 858,
-      author: 'cty',
+      currentChannel: currentChannel,
+      author: 'user01',
       messageToReply: false
     }
   },
   mounted() {
-    document.querySelector('#author').value = this.author
+    document.querySelector('#author').value = 'user01'
     setInterval(() => { Object.keys(this.messages).forEach(channel => this.fetchMessages(channel)) }, 1000);
   },
   methods: {
@@ -24,11 +24,11 @@ createApp({
         .then(response => response.json())
         .then(data=> {
           const previousChannelMsgs = this.messages[channel]
-          const newMessages = data.messages.filter(msg=> msg.id > previousChannelMsgs[previousChannelMsgs.length - 1].id)
-          if (previousChannelMsgs && newMessages.length > 0) {
+          if (previousChannelMsgs.length > 0) {
+            const newMessages = data.messages.filter(msg=> msg.id > previousChannelMsgs[previousChannelMsgs.length - 1].id)
             this.messages[channel] = [...previousChannelMsgs, ...newMessages]
             this.moveToMsg(this.lastMsgId(channel));
-          } else if (!previousChannelMsgs && data.messages.length > 0) {
+          } else {
             this.messages[channel] = data.messages;
           }
           this.members[channel] = this.getMembers(this.messages[channel]);
