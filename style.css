@@ -17,7 +17,7 @@ body {
 #app {
   display: grid;
   /* background-color: cadetblue; */
-  padding: var(--spacing);
+  padding: var(--spacing) var(--spacing) var(--spacing) 0;
 }
 
 .messages-container {
@@ -219,6 +219,7 @@ body {
   #sidebar {
     display: grid;
     grid-template-rows: auto 1fr;
+    margin-left: var(--spacing);
   }
 }
 
