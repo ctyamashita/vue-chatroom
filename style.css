@@ -132,9 +132,45 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: var(--spacing);
+  font-size: 1.2em;
 }
 .bubble-content .msg-content {
   margin: 0;
+  margin-top: var(--spacing);
+  font-size: 16px;
+  color: rgba(0,0,0,.7);
+}
+
+.bubble .bubble-content.me .msg-content {
+  color: rgba(0,0,0,.7);
+}
+
+.bubble .bubble-content.me .msg-author {
+  color: green;
+}
+
+.bubble-content .msg-author {
+  color: sienna;
+}
+
+.bubble-content > .msg-content {
+  max-width: 95%;
+  font-weight: 700;
+}
+
+.bubble-content > .msg-content:has(.bubble) {
+  max-width: 100%
+}
+
+.msg-content > .msg-content {
+  padding-top: var(--spacing);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.msg-content .bubble .msg-content, .msg-content .bubble .msg-author {
+  font-size: 14px;
+  font-weight: 400;
 }
 
 .bubble .bubble-content.me {
@@ -230,16 +266,9 @@ body {
 
 .new-channel-btn {
   border: none;
-  background-color: orange;
+  background-color: gold;
   fill: black;
   box-shadow: inset 0 -1em 1em -1em brown;
-  opacity: .7;
-  transition: .3s;
-}
-
-.new-channel-btn:hover, .new-channel-btn:focus {
-  opacity: 1;
-  transition: .3s;
 }
 
 .channel-btn {
@@ -292,7 +321,7 @@ body {
 }
 
 .posted-time {
-  color: dimgrey;
+  color: gray;
 }
 
 .msg-content > .bubble {
@@ -326,7 +355,7 @@ body {
   grid-template-columns: auto 1fr auto;
   gap: var(--spacing);
   background-color: orange;
-  border-radius: var(--spacing);
+  border-radius: 0 0 var(--spacing) var(--spacing);
 }
 
 .message-input-container:has(span:empty) {
@@ -346,13 +375,13 @@ body {
 }
 
 .message-input-container input {
-  flex-grow: 1;
+  font-size: 21px;
 }
 
 .reply-cancel-btn {
   border: none;
   background-color: transparent;
-  width: 1.5em;
+  width: 27px;
   display: inline-flex;
   cursor: pointer;
   opacity: .5;
