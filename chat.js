@@ -159,7 +159,7 @@ createApp({
     },
     resizeHandler() {
       const height = document.documentElement.clientHeight;
-      document.body.height = height;
+      document.body.style.height = height;
     }
   }
 }).mount('#app')
