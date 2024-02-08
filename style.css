@@ -50,6 +50,7 @@ body {
   display: flex;
   flex-direction: column;
   padding: var(--spacing) calc(var(--spacing) * 2);
+  padding-right: 6px;
   overflow-y: scroll;
   overflow-x: hidden;
   background: white;
