@@ -297,6 +297,7 @@ body {
   padding: var(--spacing);
   width: auto;
   text-decoration: none;
+  color: black;
   display: block;
 }
 
