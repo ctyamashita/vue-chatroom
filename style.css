@@ -169,7 +169,7 @@ body {
   display: grid;
   align-items: center;
   border-radius: var(--spacing) var(--spacing) 0 0;
-  background-color: lightblue;
+  background-color: powderblue;
   font-weight: 900;
   color: darkblue;
 }
