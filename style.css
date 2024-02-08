@@ -20,6 +20,10 @@ body {
   padding: var(--spacing) var(--spacing) var(--spacing) 0;
 }
 
+#app:has(#sidebar .members ul:empty) {
+  grid-template-columns: 1fr;
+}
+
 .messages-container {
   display: grid;
   grid-template-rows: var(--base-height) calc(100vh - (var(--base-height) * 2) - (var(--spacing) * 2)) var(--base-height);
@@ -156,6 +160,7 @@ body {
 #sidebar:has(ul:empty) {
   opacity: 0;
   width: 0;
+  height: 0;
 }
 
 #sidebar > p {
