@@ -16,14 +16,25 @@
 <body>
   <div id="app">
     <div id="sidebar">
-      <p v-html="showMemberCount()"></p>
-      <div class="members">
-        <ul>
-          <li v-for="member in members[currentChannel]" v-on:click="moveToMsg(lastMsgFromMember(member, currentChannel))">
-            <p>{{member}}</p>
-            <p>last message - <small class="posted-time" v-html="generateMemberTimestamp(member, currentChannel)"></small></p>
-          </li>
-        </ul>
+      <div class="members-container">
+        <p v-html="showMemberCount()"></p>
+        <div class="members">
+          <ul>
+            <li v-for="member in members[currentChannel]" v-on:click="moveToMsg(lastMsgFromMember(member, currentChannel))">
+              <img class="avatar" :src="`https://github.com/${member}.png`" :alt="`${member} avatar's image`">
+              <div class="member-info">
+                <p>{{member}}</p>
+                <p><small class="posted-time" v-html="generateMemberTimestamp(member, currentChannel)"></small></p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="btns-container">
+        <button v-on:click="darkmode">🌑</button>
+        <a href="https://github.com/ctyamashita/vue-chatroom" target="_blank">🧱</a>
+        <a href="https://www.linkedin.com/in/ctyamashita/" target="_blank">🙍‍♂️</a>
+        <a href="https://ctyamashita.github.io/" target="_blank">⛩️</a>
       </div>
     </div>
     <div class="messages-container">
@@ -47,12 +58,11 @@
             </div>
           </div>
         </div>
-        <button class="to-bottom-btn" v-on:click="moveToMsg(lastMsgId(currentChannel))">▼</button>
       </div>
+      <button class="to-bottom-btn" v-on:click="moveToMsg(lastMsgId(currentChannel))">▼</button>
+      <div v-html="copyReply()"></div>
       <div id="input-container">
-        <label>username
-          <input type="text" id="author" v-on:blur="setAuthor">
-        </label>
+        <p id="author">{{ author }}:</p>
         <div class="message-input-container"><span v-html="replySignal()"></span><input type="text" id="message" v-on:keyup="sendMessage"><button class="reply-cancel-btn" v-on:click="cancelReply">✖</button></div>
       </div>
     </div>

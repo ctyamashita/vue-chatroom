@@ -2,6 +2,9 @@ import { createApp } from 'vue';
 
 const oldMessages = localStorage.getItem('messages') ? JSON.parse(localStorage.getItem('messages')) : {'858': []};
 const currentChannel = 858
+let name = localStorage.getItem('username') ? localStorage.getItem('username') : prompt('Username');
+
+if (name.length == 0) name = `user-${Math.floor(Math.random() * 100)}`
 
 createApp({
   data() {
@@ -9,12 +12,12 @@ createApp({
       messages: oldMessages,
       members: {},
       currentChannel: currentChannel,
-      author: 'user01',
+      author: name,
       messageToReply: false
     }
   },
   mounted() {
-    document.querySelector('#author').value = 'user01'
+    localStorage.setItem('Please use your github username', name)
     setInterval(() => { Object.keys(this.messages).forEach(channel => this.fetchMessages(channel)) }, 1000);
   },
   methods: {
@@ -54,10 +57,6 @@ createApp({
         })
       }
     },
-    setAuthor(e) {
-      const input = e.target;
-      input.value.length > 0 ? this.author = input.value : input.value = this.author;
-    },
     setChannel(e) { this.currentChannel = e.target.id },
     isAuthor(message) { return message.author == this.author},
     getMembers(messages) {
@@ -78,9 +77,9 @@ createApp({
         const minutes = msgTime.getMinutes();
         const currentTime = new Date(Date.now());
         if (currentTime.getHours() < hours) {
-          return `yesterday at ${hours}:${minutes}`
+          return `yesterday at ${hours}:${minutes.toString().length == 1 ? `0${minutes}` : minutes}`
         } else {
-          return `${hours}:${minutes}`
+          return `${hours}:${minutes.toString().length == 1 ? `0${minutes}` : minutes}`
         }
       } else if (minutesAgo >= 720) {
         const days = Math.floor(minutesAgo / 720);
@@ -112,11 +111,24 @@ createApp({
       this.messageToReply = id;
       document.querySelector('#message').focus()
     },
+    copyReply() {
+      if (this.messageToReply) {
+        const msgReplied = this.messages[this.currentChannel].filter(msg => msg?.id == Number(this.messageToReply))[0];
+        return `<div class="reply-view">
+                  <div>
+                    <p class="msg-author">${ msgReplied.author } <small class="posted-time">${this.generateTimestamp(msgReplied)}</small></p>
+                    <p class="msg-content">${ msgReplied.content }</p>
+                  </div>
+                </div>`
+      } else {
+        return ''
+      }
+    },
     replySignal() {
       if (!this.messages[this.currentChannel]) return ''
       const replyTo = this.messages[this.currentChannel].filter(msg=>msg.id == this.messageToReply);
       if (replyTo.length === 1) {
-        return `↪ ${replyTo[0].author}`
+        return `↪`
       } else {
         return ''
       }
@@ -156,6 +168,9 @@ createApp({
           this.currentChannel = remainingChannels[0];
         }
       }
+    },
+    darkmode() {
+      document.getElementById('app').classList.toggle('darkmode');
     }
   }
 }).mount('#app')
