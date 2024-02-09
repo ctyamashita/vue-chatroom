@@ -116,7 +116,7 @@ body {
   word-wrap: break-word;
   padding: var(--spacing) calc(var(--spacing) * 2);
   background-color: lightgoldenrodyellow;
-  max-width: 80vw;
+  max-width: 70vw;
   width: auto;
   border-radius: var(--spacing) var(--spacing) var(--spacing) 0;
   margin: var(--spacing) 0;
@@ -426,4 +426,26 @@ body {
 .close-tab-btn:hover, .close-tab-btn:focus {
   opacity: 1;
   transition: .3s;
+}
+
+.to-bottom-btn {
+  position: absolute;
+  bottom: 64px;
+  right: 24px;
+  border-radius: 50%;
+  height: 32px;
+  width: 16px;
+  transform: scaleX(2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: grey;
+  padding-top: 8px;
+  border: none;
+  opacity: .3;
+  cursor: pointer;
+}
+
+.to-bottom-btn:hover, .to-bottom-btn:focus {
+  opacity: 1;
 }

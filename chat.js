@@ -126,18 +126,22 @@ createApp({
     },
     generateReply(msg) {
       const msgId = msg.match(/reply-(\d+)/);
-      const id = msgId[1];
-      const msgReplied = this.messages[this.currentChannel].filter(msg => msg?.id == Number(id))[0];
-      if (msgId && msgReplied) {
-        const msgContent = msg.replaceAll(/<\w+ \w+>reply-\d+<\/\w+>/g, '');
-        const reply = `<a href="#${msgReplied.id}" class="bubble">
-                        <div>
-                          <p class="msg-author">${ msgReplied.author } <small class="posted-time">${this.generateTimestamp(msgReplied)}</small></p>
-                          <p class="msg-content">${ msgReplied.content }</p>
-                        </div>
-                      </a>
-                      <p class="msg-content">${msgContent}</p>`
-        return reply
+      if (msgId) {
+        const id = msgId[1];
+        const msgReplied = this.messages[this.currentChannel].filter(msg => msg?.id == Number(id))[0];
+        if (msgReplied) {
+          const msgContent = msg.replaceAll(/<\w+ \w+>reply-\d+<\/\w+>/g, '');
+          const reply = `<a href="#${msgReplied.id}" class="bubble">
+                          <div>
+                            <p class="msg-author">${ msgReplied.author } <small class="posted-time">${this.generateTimestamp(msgReplied)}</small></p>
+                            <p class="msg-content">${ msgReplied.content }</p>
+                          </div>
+                        </a>
+                        <p class="msg-content">${msgContent}</p>`
+          return reply
+        } else {
+          return msg
+        }
       } else {
         return msg
       }
