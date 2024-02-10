@@ -2,7 +2,7 @@ import { createApp } from 'vue';
 
 const oldMessages = localStorage.getItem('messages') ? JSON.parse(localStorage.getItem('messages')) : {'858': []};
 const currentChannel = 858
-let name = localStorage.getItem('username') ? localStorage.getItem('username') : prompt('Username');
+let name = localStorage.getItem('username') ? localStorage.getItem('username') : prompt('Please use your github username');
 document.querySelector('.bg-start').remove();
 if (name.length == 0) name = `user-${Math.floor(Math.random() * 100)}`
 
@@ -17,7 +17,7 @@ createApp({
     }
   },
   mounted() {
-    localStorage.setItem('Please use your github username', name)
+    localStorage.setItem('username', name)
     setInterval(() => { Object.keys(this.messages).forEach(channel => this.fetchMessages(channel)) }, 1000);
   },
   methods: {
