@@ -323,8 +323,8 @@ body:has(#app.darkmode) {
 @media (min-width: 540px) {
   #app {
     grid-template-columns: auto 1fr;
-    max-width: 900px;
-    margin: 0 auto;
+    /* max-width: 900px;
+    margin: 0 auto; */
   }
 
   #sidebar {
