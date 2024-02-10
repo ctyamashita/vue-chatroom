@@ -27,7 +27,7 @@ body:has(#app.darkmode) {
 }
 
 #app.darkmode {
-  filter: hue-rotate(90deg) invert(1) brightness(1.5) sepia(1);
+  filter: hue-rotate(90deg) invert(1) sepia(1);
 }
 
 #app.darkmode img {
@@ -85,7 +85,7 @@ body:has(#app.darkmode) {
   overflow-x: hidden;
   background: whitesmoke;
   border-radius: 0 var(--spacing) 0 0;
-  box-shadow: inset 0 -7em 8em -10em lightgray;
+  box-shadow: inset 0 -10em 10em -10em lightgray;
 }
 
 #input-container {
@@ -150,8 +150,7 @@ body:has(#app.darkmode) {
   word-break: auto-phrase;
   padding: var(--spacing);
   background-color: khaki;
-  max-width: 70vw;
-  min-width: 10vw;
+  max-width: 60%;
   width: fit-content;
   border-radius: var(--spacing) var(--spacing) var(--spacing) 0;
   margin: var(--spacing) 0;
@@ -194,7 +193,7 @@ body:has(#app.darkmode) {
 
 .bubble-content > .msg-content {
   padding-right: 24px;
-  font-weight: 700;
+  /* font-weight: 700; */
 }
 
 .bubble-content > .msg-content:has(.bubble) {
@@ -204,7 +203,7 @@ body:has(#app.darkmode) {
 .msg-content > .msg-content {
   padding-right: 24px;
   font-size: 16px;
-  font-weight: 700;
+  /* font-weight: 700; */
 }
 
 .msg-content .bubble .msg-content, .msg-content .bubble .msg-author {
@@ -224,11 +223,11 @@ body:has(#app.darkmode) {
 }
 
 .members {
-  background: lightblue;
+  background: rgba(255,255,255,0.5);
   border-radius: 0 0 var(--spacing) var(--spacing);
   overflow-y: scroll;
   max-width: 300px;
-  box-shadow: inset 0 7em 8em -10em dodgerblue;
+  box-shadow: inset 0 7em 8em -10em dimgray;
   padding-left: var(--spacing);
   flex-grow: 1;
   height: calc(100vh - var(--base-height) * 3);
@@ -253,13 +252,13 @@ body:has(#app.darkmode) {
   display: grid;
   align-items: center;
   border-radius: var(--spacing) var(--spacing) 0 0;
-  background-color: powderblue;
+  background-color: rgba(255,255,255,0.7);
   font-weight: 900;
-  color: darkblue;
+  color: var(--black);
 }
 
 .members ul li {
-  border: solid 3px cornflowerblue;
+  border: solid 3px rgba(255,255,255,0.5);
   border-radius: var(--spacing);
   overflow: hidden;
   margin-bottom: var(--spacing);
@@ -277,29 +276,36 @@ body:has(#app.darkmode) {
 }
 
 .members ul li:hover, .members ul li:focus {
-  border: solid 3px darkslateblue;
+  border: solid 3px var(--black);
 }
 
 .members ul li:hover p:first-child, .members ul li:focus p:first-child {
-  background-color: darkslateblue;
+  background-color: var(--black);
+  color: whitesmoke;
 }
 
 .members ul li .member-info {
   display: grid;
   align-items: center;
+  border-left: solid 3px rgba(255,255,255,0.5);
+}
+
+.members ul li:hover .member-info {
+  border-color: var(--black);
 }
 
 .members ul li p {
   word-wrap: break-word;
   margin: 0;
   padding: 4px 8px;
+  background-color: rgba(255,255,255,0.2);
 }
 
 .members ul li p:first-child {
   font-size: 1.2em;
   font-weight: 900;
-  background-color: cornflowerblue;
-  color: white;
+  background-color: rgba(255,255,255,0.5);
+  color: var(--black);
 }
 
 #channel {
@@ -313,9 +319,11 @@ body:has(#app.darkmode) {
   width: 100%;
 }
 
-@media (min-width: 480px) {
+@media (min-width: 540px) {
   #app {
     grid-template-columns: auto 1fr;
+    max-width: 900px;
+    margin: 0 auto;
   }
 
   #sidebar {
@@ -330,13 +338,13 @@ body:has(#app.darkmode) {
   border: none;
   background-color: gold;
   fill: var(--black);
-  box-shadow: inset 0 -1em 1em -1em brown;
+  box-shadow: inset 0 -1em 1em -1em orangered;
 }
 
 .channel-btn {
-  background-color: teal;
+  background-color: whitesmoke;
   color: white;
-  box-shadow: inset 0 -1em 1em -1em rebeccapurple;
+  box-shadow: inset 0 -5em 1em -5em darkgrey;
 }
 
 .channel-btn, .new-channel-btn {
@@ -447,6 +455,7 @@ body:has(#app.darkmode) {
   padding: 0 var(--spacing);
   box-shadow: inset 0 0 0 1px dimgray;
   border-radius: 50px;
+  width: calc(100% - var(--spacing) * 2);
 }
 
 .reply-cancel-btn {
@@ -482,8 +491,8 @@ body:has(#app.darkmode) {
   justify-content: center;
   margin: var(--spacing);
   border-radius: 50%;
-  background-color: crimson;
-  font-size: 1em;
+  background-color: transparent;
+  box-shadow: inset 0 0 0 2px;
   font-weight: 900;
   color: white;
   cursor: pointer;
@@ -568,4 +577,31 @@ body:has(#app.darkmode) {
 
 .btns-container button:hover, .btns-container a:hover {
   background-color: lightgray;
+}
+
+#bg {
+  z-index: -1;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: 300% 300%;
+  background-image: linear-gradient(
+        -45deg,
+        rgba(59,173,227,1) 0%,
+        rgba(87,111,230,1) 25%,
+        rgba(152,68,183,1) 51%,
+        rgba(255,53,127,1) 100%
+  );
+  animation: AnimateBG 120s ease infinite;
+}
+
+@keyframes AnimateBG {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }

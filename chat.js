@@ -71,20 +71,20 @@ createApp({
     },
     generateTimestamp(msg) {
       const minutesAgo = Math.round((Date.now() - Date.parse(msg.created_at))/60000)
-      if (minutesAgo >= 60) {
+      if (minutesAgo >= 720) {
+        const days = Math.floor(minutesAgo / 720);
+        return days == 1 ? 'yesterday' : `${days}d ago`;
+      } else if (minutesAgo >= 60) {
         const msgTime = new Date(msg.created_at)
         const hours = msgTime.getHours();
         const minutes = msgTime.getMinutes();
         const currentTime = new Date(Date.now());
-        // if (currentTime.getHours() < hours) {
+        // if (currentTime < msgTime) {
         //   return `yesterday at ${hours}:${minutes.toString().length == 1 ? `0${minutes}` : minutes}`
         // } else {
         //   return `${hours}:${minutes.toString().length == 1 ? `0${minutes}` : minutes}`
         // }
-        return `${hours - currentTime.getHours()}h ago`
-      } else if (minutesAgo >= 720) {
-        const days = Math.floor(minutesAgo / 720);
-        return days == 1 ? 'yesterday' : `${days}d ago`;
+        return `${Math.floor(minutesAgo / 60)}h ago`
       } else if (minutesAgo == 0) {
         return 'now';
       } else {
