@@ -15,6 +15,7 @@
 </head>
 <body>
   <div id="app">
+    <div class="bg-start"></div>
     <div id="sidebar">
       <div class="members-container">
         <p v-html="showMemberCount()"></p>
@@ -31,10 +32,10 @@
         </div>
       </div>
       <div class="btns-container">
-        <button v-on:click="darkmode">🌑</button>
-        <a href="https://github.com/ctyamashita/vue-chatroom" target="_blank">🧱</a>
-        <a href="https://www.linkedin.com/in/ctyamashita/" target="_blank">🙍‍♂️</a>
-        <a href="https://ctyamashita.github.io/" target="_blank">⛩️</a>
+        <button v-on:click="darkmode">☯︎</button>
+        <a href="https://github.com/ctyamashita/vue-chatroom" target="_blank">🛠</a>
+        <a href="https://www.linkedin.com/in/ctyamashita/" target="_blank">ℹ️</a>
+        <a href="https://ctyamashita.github.io/" target="_blank">ᨒ</a>
       </div>
     </div>
     <div class="messages-container">
@@ -46,7 +47,7 @@
           </label>
           <button v-on:click="createNewChannel" class="new-channel-btn">+</button>
         </div>
-        <button class="close-tab-btn"  v-on:click="closeChannel">✖</button>
+        <button class="close-tab-btn" v-on:click="closeChannel">✖</button>
       </div>
       <div id="messages">
         <div class="bubble" v-for="msg in messages[currentChannel]" :id="msg.id">

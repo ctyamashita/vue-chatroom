@@ -3,7 +3,7 @@ import { createApp } from 'vue';
 const oldMessages = localStorage.getItem('messages') ? JSON.parse(localStorage.getItem('messages')) : {'858': []};
 const currentChannel = 858
 let name = localStorage.getItem('username') ? localStorage.getItem('username') : prompt('Username');
-
+document.querySelector('.bg-start').remove();
 if (name.length == 0) name = `user-${Math.floor(Math.random() * 100)}`
 
 createApp({
@@ -76,11 +76,12 @@ createApp({
         const hours = msgTime.getHours();
         const minutes = msgTime.getMinutes();
         const currentTime = new Date(Date.now());
-        if (currentTime.getHours() < hours) {
-          return `yesterday at ${hours}:${minutes.toString().length == 1 ? `0${minutes}` : minutes}`
-        } else {
-          return `${hours}:${minutes.toString().length == 1 ? `0${minutes}` : minutes}`
-        }
+        // if (currentTime.getHours() < hours) {
+        //   return `yesterday at ${hours}:${minutes.toString().length == 1 ? `0${minutes}` : minutes}`
+        // } else {
+        //   return `${hours}:${minutes.toString().length == 1 ? `0${minutes}` : minutes}`
+        // }
+        return `${hours - currentTime.getHours()}h ago`
       } else if (minutesAgo >= 720) {
         const days = Math.floor(minutesAgo / 720);
         return days == 1 ? 'yesterday' : `${days}d ago`;
