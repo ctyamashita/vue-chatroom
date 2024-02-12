@@ -13,7 +13,6 @@ body {
   align-items: flex-start;
   font-family: monospace;
   background-color: cadetblue;
-  overflow-y: hidden;
 }
 
 body:has(#app.darkmode) {
