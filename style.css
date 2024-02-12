@@ -13,6 +13,7 @@ body {
   align-items: flex-start;
   font-family: monospace;
   background-color: cadetblue;
+  position: relative;
 }
 
 body:has(#app.darkmode) {
