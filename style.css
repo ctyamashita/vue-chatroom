@@ -175,6 +175,10 @@ body:has(#app.darkmode) {
   color: var(--black);
 }
 
+.msg-content img {
+  width: 100%;
+}
+
 .bubble .bubble-content.me > .msg-content {
   color: var(--black);
   margin: 0;
