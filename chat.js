@@ -146,11 +146,11 @@ createApp({
           const msgContent = msg.replaceAll(/<\w+ \w+>reply-\d+<\/\w+>/g, '');
           const reply = `<a href="#${msgReplied.id}" class="bubble">
                           <div>
-                            <p class="msg-author">${ msgReplied.author } <small class="posted-time">${this.generateTimestamp(msgReplied)}</small></p>
-                            <p class="msg-content">${ msgReplied.content }</p>
+                            <p class="msg-author">${ this.cleanContent(msgReplied.author) } <small class="posted-time">${this.generateTimestamp(msgReplied)}</small></p>
+                            <p class="msg-content">${ this.cleanContent(msgReplied.content) }</p>
                           </div>
                         </a>
-                        <p class="msg-content">${msgContent}</p>`
+                        <p class="msg-content">${ this.cleanContent(msgContent) }</p>`
           return reply
         } else {
           return msg
@@ -172,6 +172,9 @@ createApp({
     },
     darkmode() {
       document.getElementById('app').classList.toggle('darkmode');
+    },
+    cleanContent(string) {
+      return string.replace(/<\/?[^>]+(>|$)/g, "")
     }
   }
 }).mount('#app')
