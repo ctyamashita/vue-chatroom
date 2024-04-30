@@ -414,7 +414,7 @@ body:has(#app.darkmode) {
 
 .message-input-container {
   padding: var(--spacing);
-  padding-top: calc(var(--spacing) - 4px);
+  /* padding-top: calc(var(--spacing) - 4px); */
 }
 
 #input-container:has(span:empty) > label {
@@ -452,7 +452,7 @@ body:has(#app.darkmode) {
 }
 
 .message-input-container input {
-  font-size: 21px;
+  font-size: 1.2em;
   border: none;
   padding: 0 var(--spacing);
   box-shadow: inset 0 0 0 1px dimgray;
