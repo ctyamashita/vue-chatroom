@@ -153,10 +153,10 @@ createApp({
                         <p class="msg-content">${ this.cleanContent(msgContent) }</p>`
           return reply
         } else {
-          return msg
+          return this.cleanContent(msg)
         }
       } else {
-        return msg
+        return this.cleanContent(msg)
       }
     },
     closeChannel() {
