@@ -175,7 +175,7 @@ createApp({
     },
     cleanContent(string) {
       const cleanString = string.replace(/<\/?[^>]+(>|$)/g, "");
-      return cleanString.trim().length === 0 ? '[content removed]' : cleanString
+      return cleanString.trim().length === 0 ? '<span style="color: firebrick">[content removed]</span>' : cleanString
     }
   }
 }).mount('#app')
