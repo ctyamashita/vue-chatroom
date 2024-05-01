@@ -137,7 +137,7 @@ createApp({
     cancelReply() {
       this.messageToReply = false
     },
-    generateReply(msg) {
+    checkReply(msg) {
       const msgId = msg.match(/reply-(\d+)/);
       if (msgId) {
         const id = msgId[1];
@@ -174,7 +174,8 @@ createApp({
       document.getElementById('app').classList.toggle('darkmode');
     },
     cleanContent(string) {
-      return string.replace(/<\/?[^>]+(>|$)/g, "")
+      const cleanString = string.replace(/<\/?[^>]+(>|$)/g, "");
+      return cleanString.trim().length === 0 ? '[content removed]' : cleanString
     }
   }
 }).mount('#app')

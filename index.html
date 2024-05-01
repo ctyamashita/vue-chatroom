@@ -54,7 +54,7 @@
         <div class="bubble" v-for="msg in messages[currentChannel]" :id="msg.id">
           <div :class="isAuthor(msg) ? 'bubble-content me' : 'bubble-content'" :id="this.messageToReply == msg.id ? 'highlight' : ''">
             <p class="msg-author">{{ msg.author }} <small class="posted-time" v-html="generateTimestamp(msg)"></small></p>
-            <p class="msg-content" v-html="generateReply(msg.content)"></p>
+            <p class="msg-content" v-html="checkReply(msg.content)"></p>
             <div class="reply-btn-container">
               <button class="reply-btn" v-on:click="triggerReply(msg.id)">↩</btn>
             </div>
