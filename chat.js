@@ -160,7 +160,7 @@ createApp({
       }
     },
     closeChannel() {
-      if (Object.keys(this.messages).length == 1) {
+      if (Object.keys(this.messages).length === 1) {
         alert('You need at least 1 channel open!')
       } else {
         if (confirm('Are you sure you want to close this tab?')) {
