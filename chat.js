@@ -19,6 +19,7 @@ createApp({
   mounted() {
     localStorage.setItem('username', name)
     setInterval(() => { Object.keys(this.messages).forEach(channel => this.fetchMessages(channel)) }, 1000);
+    this.currentChannel = Object.keys(this.messages)[0];
   },
   methods: {
     fetchMessages(channel) {
