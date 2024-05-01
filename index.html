@@ -23,7 +23,7 @@
         <div class="members">
           <ul>
             <li v-for="member in members[currentChannel]" v-on:click="moveToMsg(lastMsgFromMember(member, currentChannel))">
-              <img class="avatar" :src="`https://github.com/${member}.png`" :alt="`${member} avatar's image`">
+              <img class="avatar" :src="`https://github.com/${member}.png`" :alt="`${member} avatar's image`" onerror="this.src='./no-image.svg'">
               <div class="member-info">
                 <p>{{member}}</p>
                 <p><small class="posted-time" v-html="generateMemberTimestamp(member, currentChannel)"></small></p>
