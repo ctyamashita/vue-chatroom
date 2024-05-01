@@ -44,7 +44,7 @@
         <div class="channels">
           <label class="channel-btn" v-for="channel in Object.keys(messages)" >
             #{{channel}}
-            <input type="radio" name="channel" :id="channel" :checked="channel == currentChannel" v-on:click="setChannel">
+            <input type="radio" name="channel" :id="channel" :checked="(channel === currentChannel || Object.keys(messages).length === 1)" v-on:click="setChannel">
           </label>
           <button v-on:click="createNewChannel" class="new-channel-btn">+</button>
         </div>
