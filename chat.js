@@ -1,10 +1,21 @@
 import { createApp } from 'vue';
+import Swal from 'sweetalert2';
+
+let name = localStorage.getItem('username')
+
+if (name === 'null' || name === null || name === undefined) {
+  let { value: newName } = await Swal.fire({
+    input: "text",
+    inputLabel: "Use your github name",
+    inputPlaceholder: "user-00"
+  });
+  if (newName === 'null' || newName.length === 0) newName = `user-${Math.floor(Math.random() * 10000)}`
+  name = newName
+}
+document.querySelector('.bg-start').remove();
 
 const oldMessages = localStorage.getItem('messages') ? JSON.parse(localStorage.getItem('messages')) : {'858': []};
 const currentChannel = 858
-let name = localStorage.getItem('username') ? localStorage.getItem('username') : prompt('Please use your github username');
-document.querySelector('.bg-start').remove();
-if (name.length == 0) name = `user-${Math.floor(Math.random() * 100)}`
 
 createApp({
   data() {
@@ -66,9 +77,13 @@ createApp({
       return [...new Set(members)]
     },
     showMemberCount() { return `Members (${this.members[this.currentChannel] ? this.members[this.currentChannel].length : 0})` },
-    createNewChannel() {
-      const channel = prompt("Please enter the batch number", "000");
-      if (channel !== null && channel !== "") { this.messages[channel] = [] }
+    async createNewChannel() {
+      let { value: channel } = await Swal.fire({
+        input: "number",
+        inputLabel: "Input batch number",
+        inputPlaceholder: "000"
+      });
+      if (channel !== null && channel !== "" && channel !== undefined) { this.messages[channel] = [] }
     },
     generateTimestamp(msg) {
       const minutesAgo = Math.round((Date.now() - Date.parse(msg.created_at))/60000)
@@ -147,34 +162,42 @@ createApp({
           const msgContent = msg.replaceAll(/<\w+ \w+>reply-\d+<\/\w+>/g, '');
           const reply = `<a href="#${msgReplied.id}" class="bubble">
                           <div>
-                            <p class="msg-author">${ this.cleanContent(msgReplied.author) } <small class="posted-time">${this.generateTimestamp(msgReplied)}</small></p>
-                            <p class="msg-content">${ this.cleanContent(msgReplied.content) }</p>
+                            <p class="msg-author">${ this.removeTags(msgReplied.author) } <small class="posted-time">${this.generateTimestamp(msgReplied)}</small></p>
+                            <p class="msg-content">${ msgReplied.content.replaceAll(/<\w+ \w+>reply-\d+<\/\w+>/g, '') }</p>
                           </div>
                         </a>
-                        <p class="msg-content">${ this.cleanContent(msgContent) }</p>`
+                        <p class="msg-content">${ this.removeTags(msgContent) }</p>`
           return reply
         } else {
-          return this.cleanContent(msg)
+          return this.removeTags(msg)
         }
       } else {
-        return this.cleanContent(msg)
+        return this.removeTags(msg)
       }
     },
     closeChannel() {
       if (Object.keys(this.messages).length === 1) {
-        alert('You need at least 1 channel open!')
+        Swal.fire('You need at least 1 channel open!');
       } else {
-        if (confirm('Are you sure you want to close this tab?')) {
-          const remainingChannels = Object.keys(this.messages).filter(channel => Number(channel) == this.currentChannel)
+        Swal.fire({
+          title: "Are you sure?",
+          showCancelButton: true,
+          confirmButtonText: "Confirm",
+          denyButtonText: `Cancel`
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            const remainingChannels = Object.keys(this.messages).filter(channel => Number(channel) == this.currentChannel)
           delete this.messages[this.currentChannel];
           this.currentChannel = remainingChannels[0];
-        }
+          }
+        });
       }
     },
     darkmode() {
       document.getElementById('app').classList.toggle('darkmode');
     },
-    cleanContent(string) {
+    removeTags(string) {
       const cleanString = string.replace(/<\/?[^>]+(>|$)/g, "");
       return cleanString.trim().length === 0 ? '<span style="color: firebrick">[content removed]</span>' : cleanString
     }
