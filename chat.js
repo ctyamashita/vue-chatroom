@@ -76,7 +76,7 @@ createApp({
       const members = messages.map((msg) => {return msg.author})
       return [...new Set(members)]
     },
-    showMemberCount() { return `Members (${this.members[this.currentChannel] ? this.members[this.currentChannel].length : 0})` },
+    showMemberCount() { return `<i class="fa-solid fa-user-group"></i> (${this.members[this.currentChannel] ? this.members[this.currentChannel].length : 0})` },
     async createNewChannel() {
       let { value: channel } = await Swal.fire({
         input: "number",
@@ -145,7 +145,7 @@ createApp({
       if (!this.messages[this.currentChannel]) return ''
       const replyTo = this.messages[this.currentChannel].filter(msg=>msg.id == this.messageToReply);
       if (replyTo.length === 1) {
-        return `↪`
+        return `<i class="fa-solid fa-reply" style="rotate: 180deg"></i>`
       } else {
         return ''
       }
@@ -175,6 +175,12 @@ createApp({
         return this.removeTags(msg)
       }
     },
+    checkLinks(string) {
+      const links = string.match(/(https?:\/\/w{0,3}\.?[a-zA-Z0-9\-_\.\/?=&]+)/)
+      let newString = string.split(' ');
+      if (links && links.length > 0) return newString.map(word=>links.includes(word) ? `<a href="${word}" target="_blank" class="external-link">${word.split('/')[2]} <i class="fa-solid fa-arrow-up-right-from-square"></i>` : word).join(' ')
+      return string
+    },
     closeChannel() {
       if (Object.keys(this.messages).length === 1) {
         Swal.fire('You need at least 1 channel open!');
@@ -199,7 +205,7 @@ createApp({
     },
     removeTags(string) {
       const cleanString = string.replace(/<\/?[^>]+(>|$)/g, "");
-      return cleanString.trim().length === 0 ? '<span style="color: firebrick">[content removed]</span>' : cleanString
+      return cleanString.trim().length === 0 ? '<span style="color: firebrick">[content removed]</span>' : this.checkLinks(cleanString)
     }
   }
 }).mount('#app')

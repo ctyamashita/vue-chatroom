@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./style.css">
+  <script src="https://kit.fontawesome.com/b6f21dd2ae.js" crossorigin="anonymous"></script>
   <link rel="icon" href="chat-icon.png">
   <title>Chatroom</title>
   <script async src="https://ga.jspm.io/npm:es-module-shims@1.6.3/dist/es-module-shims.js"></script>
@@ -36,10 +37,10 @@
         </div>
       </div>
       <div class="btns-container">
-        <button v-on:click="darkmode">☯︎</button>
-        <a href="https://github.com/ctyamashita/vue-chatroom" target="_blank">🛠</a>
-        <a href="https://www.linkedin.com/in/ctyamashita/" target="_blank">ℹ️</a>
-        <a href="https://ctyamashita.github.io/" target="_blank">ᨒ</a>
+        <button v-on:click="darkmode"><i class="fa-solid fa-moon"></i></button>
+        <a href="https://github.com/ctyamashita/vue-chatroom" target="_blank"><i class="fa-solid fa-code"></i></a>
+        <a href="https://www.linkedin.com/in/ctyamashita/" target="_blank"><i class="fa-solid fa-address-card"></i></a>
+        <a href="https://ctyamashita.github.io/" target="_blank"><i class="fa-solid fa-mountain"></i></a>
       </div>
     </div>
     <div class="messages-container">
@@ -51,7 +52,7 @@
           </label>
           <button v-on:click="createNewChannel" class="new-channel-btn">+</button>
         </div>
-        <button class="close-tab-btn" v-on:click="closeChannel">✖</button>
+        <button class="close-tab-btn" v-on:click="closeChannel"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div id="messages">
         <div class="bubble" v-for="msg in messages[currentChannel]" :id="msg.id">
@@ -59,7 +60,7 @@
             <p class="msg-author" v-cloak>{{ msg.author }} <small class="posted-time" v-html="generateTimestamp(msg)"></small></p>
             <p class="msg-content" v-html="checkReply(msg.content)"></p>
             <div class="reply-btn-container">
-              <button class="reply-btn" v-on:click="triggerReply(msg.id)">↩</btn>
+              <button class="reply-btn" v-on:click="triggerReply(msg.id)"><i class="fa-solid fa-reply" style="scale: 1 -1"></i></btn>
             </div>
           </div>
         </div>
@@ -68,7 +69,7 @@
       <div v-html="copyReply()"></div>
       <div id="input-container">
         <p id="author" v-cloak>{{ author }}:</p>
-        <div class="message-input-container"><span v-html="replySignal()"></span><input type="text" id="message" v-on:keyup="sendMessage"><button class="reply-cancel-btn" v-on:click="cancelReply">✖</button></div>
+        <div class="message-input-container"><span v-html="replySignal()"></span><input type="text" id="message" v-on:keyup="sendMessage"><button class="reply-cancel-btn" v-on:click="cancelReply"><i class="fa-solid fa-circle-xmark"></i></button></div>
       </div>
     </div>
   </div>

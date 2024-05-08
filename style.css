@@ -125,7 +125,7 @@ body:has(#app.darkmode) {
 
 .reply-btn-container {
   position: absolute;
-  bottom: calc(var(--spacing)/3);
+  bottom: calc(var(--spacing)/2);
   right: var(--spacing);
 }
 
@@ -181,6 +181,23 @@ body:has(#app.darkmode) {
 
 .msg-content img {
   width: 100%;
+}
+
+.msg-content a.external-link {
+  font-size: .8em;
+  border: solid 2px;
+  padding: .2em .4em .1em .5em;
+  border-radius: 50px;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: block;
+  max-width: fit-content;
+  white-space: nowrap;
+}
+
+.msg-content a.external-link:hover {
+  background-color: rgba(255,255,255,.3);
 }
 
 .bubble .bubble-content.me > .msg-content {
@@ -259,7 +276,8 @@ body:has(#app.darkmode) {
   margin: 0;
   font-size: 1.2em;
   height: var(--base-height);
-  display: grid;
+  display: flex;
+  justify-content: center;
   align-items: center;
   border-radius: var(--spacing) var(--spacing) 0 0;
   background-color: rgba(255,255,255,0.7);
@@ -453,7 +471,7 @@ body:has(#app.darkmode) {
 
 .message-input-container span {
   padding-left: var(--spacing);
-  color: dimgray;
+  color: gray;
 }
 
 .message-input-container span:empty {
