@@ -54,7 +54,7 @@ createApp({
       const url = `https://wagon-chat.herokuapp.com/${this.currentChannel}/messages`;
       const input = e.target
       const isReply = this.messageToReply ? `<span hidden>reply-${this.messageToReply}</span>` : ''
-      if (e.key == 'Enter' && this.author) {
+      if (e.key === 'Enter' && input.value.length > 0 && this.author) {
         fetch(url, {
           method: 'POST',
           headers: { "Content-Type": "application/json" },
@@ -205,7 +205,7 @@ createApp({
     },
     removeTags(string) {
       const cleanString = string.replace(/<\/?[^>]+(>|$)/g, "");
-      return cleanString.trim().length === 0 ? '<span style="color: firebrick">[content removed]</span>' : this.checkLinks(cleanString)
+      return (cleanString.trim().length === 0 && string.length > 0) ? '<span style="color: firebrick">[content removed]</span>' : this.checkLinks(cleanString)
     }
   }
 }).mount('#app')
