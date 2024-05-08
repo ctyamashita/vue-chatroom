@@ -134,7 +134,7 @@ body:has(#app.darkmode) {
   background: transparent;
   color: teal;
   padding: 0;
-  opacity: .5;
+  opacity: .3;
 }
 
 .reply-btn:hover, .reply-btn:focus {
