@@ -35,8 +35,9 @@ createApp({
   methods: {
     fetchMessages(channel) {
       const url = `https://wagon-chat.herokuapp.com/${channel}/messages`;
-      fetch(url, {mode: 'no-cors'})
-        .then(response => response.json())
+      fetch(url, {
+        mode: 'no-cors'
+      }).then(response => response.json())
         .then(data=> {
           const previousChannelMsgs = this.messages[channel]
           if (previousChannelMsgs.length > 0) {
