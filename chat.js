@@ -34,10 +34,8 @@ createApp({
   },
   methods: {
     fetchMessages(channel) {
-      const url = `https://wagon-chat.herokuapp.com/${channel}/messages`;
-      fetch(url, {
-        mode: 'no-cors'
-      }).then(response => response.json())
+      const url = `https://chat.api.lewagon.com/${channel}/messages`;
+      fetch(url).then(response => response.json())
         .then(data=> {
           const previousChannelMsgs = this.messages[channel]
           if (previousChannelMsgs.length > 0) {
@@ -52,12 +50,11 @@ createApp({
         });
     },
     sendMessage(e) {
-      const url = `https://wagon-chat.herokuapp.com/${this.currentChannel}/messages`;
+      const url = `https://chat.api.lewagon.com/${this.currentChannel}/messages`;
       const input = e.target
       const isReply = this.messageToReply ? `<span hidden>reply-${this.messageToReply}</span>` : ''
       if (e.key === 'Enter' && input.value.length > 0 && this.author) {
         fetch(url, {
-          mode: 'no-cors',
           method: 'POST',
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({author: this.author, content: `${isReply}${input.value}`})
