@@ -35,7 +35,7 @@ createApp({
   methods: {
     fetchMessages(channel) {
       const url = `https://wagon-chat.herokuapp.com/${channel}/messages`;
-      fetch(url, {headers: {"Access-Control-Allow-Origin": "*"}})
+      fetch(url, {mode: 'no-cors'})
         .then(response => response.json())
         .then(data=> {
           const previousChannelMsgs = this.messages[channel]
@@ -56,8 +56,9 @@ createApp({
       const isReply = this.messageToReply ? `<span hidden>reply-${this.messageToReply}</span>` : ''
       if (e.key === 'Enter' && input.value.length > 0 && this.author) {
         fetch(url, {
+          mode: 'no-cors',
           method: 'POST',
-          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({author: this.author, content: `${isReply}${input.value}`})
         }).then(response=>response.json()).then(data=>{
           input.value = ''
